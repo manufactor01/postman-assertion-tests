@@ -1,0 +1,181 @@
+{
+	"info": {
+		"_postman_id": "d561f846-a796-4491-8298-a7cb1caf41bd",
+		"name": "Postman Assertions",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25556193"
+	},
+	"item": [
+		{
+			"name": "Assertions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Objects to should be differents\", function () {\r",
+							"    let a = {\r",
+							"        \"name\": \"John\"\r",
+							"    };\r",
+							"    let b = {\r",
+							"        \"name\": \"Jane\"\r",
+							"    };\r",
+							"    pm.expect(a).to.not.eql(b, 'objects are differents!')\r",
+							"});\r",
+							"\r",
+							"pm.test(\"null value to should be checked\", function () {\r",
+							"    pm.expect(null).to.be.null;\r",
+							"})\r",
+							"\r",
+							"pm.test(\"undefined value to should be checked\", function () {\r",
+							"    pm.expect(undefined).to.be.undefined;\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Array to should be not empty\", function () {\r",
+							"    pm.expect([1, 2, 3]).to.not.be.empty;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"2 to should be contained on [1, 2, 3]\", function () {\r",
+							"    pm.expect(2).to.be.oneOf([1, 2, 3]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Regex Assertion: Name to should be contained on text\", function () {\r",
+							"    pm.expect('John Doe').to.match(/^John/);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.example.com",
+					"protocol": "https",
+					"host": [
+						"www",
+						"example",
+						"com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Array Assertions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// GET https://www.mocky.io/v2/5ab350d62f00005a00ca3663\r",
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"for (let filter of jsonData.filters) {\r",
+							"    console.log(filter.name);\r",
+							"}\r",
+							"\r",
+							"// get filters from array\r",
+							"let filter1 = jsonData.filters[0];\r",
+							"let filter2 = jsonData.filters[1];\r",
+							"let filter3 = jsonData.filters[2];\r",
+							"\r",
+							"pm.test(\"101 filter to should be named VENDOR\", function () {\r",
+							"    pm.expect(filter1.name).to.eql('VENDOR');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"VENDOR filter should not be allowed\", function () {\r",
+							"    pm.expect(filter1.isAllowed).to.be.false;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"102 filter to should be named COUNTRY\", function () {\r",
+							"    pm.expect(filter2.name).to.eql('COUNTRY');\r",
+							"})\r",
+							"\r",
+							"pm.test(\"COUNTRY filter should be allowed\", function () {\r",
+							"    pm.expect(filter2.isAllowed).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"103 filter to should be named MANUFACTURES\", function () {\r",
+							"    pm.expect(filter3.name).to.eql('MANUFACTURER');\r",
+							"})\r",
+							"\r",
+							"pm.test(\"MANUFACTURER should not be allowed\", function () {\r",
+							"    pm.expect(filter3.isAllowed).to.be.false;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.mocky.io/v2/5ab350d62f00005a00ca3663",
+					"protocol": "https",
+					"host": [
+						"www",
+						"mocky",
+						"io"
+					],
+					"path": [
+						"v2",
+						"5ab350d62f00005a00ca3663"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Assertions on nested objects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// GET https://www.mocky.io/v2/5ab34d8c2f00006600ca3652\r",
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"comments should be disabled\", function () {\r",
+							"    pm.expect(jsonData.prefs.comments.status).to.eql(\"disabled\");\r",
+							"});\r",
+							"\r",
+							"let boardStatus;\r",
+							"\r",
+							"for (let key in jsonData.limits) {\r",
+							"    if (jsonData.limits[key].hasOwnProperty('boards')) {\r",
+							"        boardStatus = jsonData.limits[key].boards.totalPerMember.status;\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.test(\"status should be OK\", function () {\r",
+							"    pm.expect(boardStatus).to.eql(\"ok\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.mocky.io/v2/5ab34d8c2f00006600ca3652",
+					"protocol": "https",
+					"host": [
+						"www",
+						"mocky",
+						"io"
+					],
+					"path": [
+						"v2",
+						"5ab34d8c2f00006600ca3652"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
